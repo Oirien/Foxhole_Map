@@ -59,6 +59,12 @@ const MapTile = ({ gridData, mapName }) => {
 	const wardenOwned = mapData.mapItems.filter((position) => {
 		return position.teamId === "WARDENS";
 	});
+	const victoryPoints = mapData.mapItems.filter((vp) => {
+		return [45, 46, 47, 56, 57, 58].includes(vp.iconType);
+	});
+	const colonialVictoryPoints = victoryPoints.filter((vp) => {
+		return vp.teamId === "COLONIALS";
+	});
 
 	const isColonialOwned = colonialOwned.length > 0 && wardenOwned.length === 0;
 	const isWardenOwned = colonialOwned.length === 0 && wardenOwned.length > 0;
@@ -75,6 +81,9 @@ const MapTile = ({ gridData, mapName }) => {
 			<TileName>{MapName}</TileName>
 			<QueueName queue={wardenQueue}>Warden Queue: {gridData.wardenQueueSize}</QueueName>
 			<QueueName queue={colonialQueue}>Colonial Queue: {gridData.colonialQueueSize}</QueueName>
+			<p>
+				Colonials Control {colonialVictoryPoints.length}/{victoryPoints.length}
+			</p>
 		</TileGroup>
 	);
 };
