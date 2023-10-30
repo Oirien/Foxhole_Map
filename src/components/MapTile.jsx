@@ -25,7 +25,7 @@ const TileName = styled.h1`
 const QueueName = styled.p`
 	color: ${(props) =>
 		props.queue == 1
-			? "rgba(87, 0, 0, 1)"
+			? "rgba(138, 138, 138, 0.95)"
 			: props.queue == 2
 			? "rgba(180, 0, 0, 1)"
 			: props.queue == 3
