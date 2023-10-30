@@ -73,8 +73,8 @@ const MapTile = ({ gridData, mapName }) => {
 	return (
 		<TileGroup iscolonialowned={isColonialOwned.toString()} iswardenowned={isWardenOwned.toString()}>
 			<TileName>{MapName}</TileName>
-			<QueueName queue={colonialQueue}>Colonial Queue: {gridData.colonialQueueSize}</QueueName>
 			<QueueName queue={wardenQueue}>Warden Queue: {gridData.wardenQueueSize}</QueueName>
+			<QueueName queue={colonialQueue}>Colonial Queue: {gridData.colonialQueueSize}</QueueName>
 		</TileGroup>
 	);
 };
