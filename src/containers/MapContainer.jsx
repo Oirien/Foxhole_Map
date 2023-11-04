@@ -70,10 +70,18 @@ const MapContainer = ({ queueData }) => {
     const Tempest = queueMap.filter(grid => grid.currentMap === "TempestIslandHex");
     const Fingers = queueMap.filter(grid => grid.currentMap === "TheFingersHex");
 
+    const totalWardenQueue = queueMap.reduce((total, grid) => total + grid.wardenQueueSize, 0);
+    const totalColonialQueue = queueMap.reduce((total, grid) => total + grid.colonialQueueSize, 0);
+
     return (
         <>
-            <PlayerRatio>Wardens : {(queueData.normalizedGlobalPopulation * 100).toPrecision(4)}%</PlayerRatio>
-            <PlayerRatio>Colonials : {((1 - queueData.normalizedGlobalPopulation) * 100).toPrecision(4)}%</PlayerRatio>
+            <PlayerRatio>
+                Wardens : {(queueData.normalizedGlobalPopulation * 100).toPrecision(4)}% - Total Wardens in Queues: {totalWardenQueue}
+            </PlayerRatio>
+            <PlayerRatio>
+                Colonials : {((1 - queueData.normalizedGlobalPopulation) * 100).toPrecision(4)}% - Total Colonials in Queues:{" "}
+                {totalColonialQueue}
+            </PlayerRatio>
             <FlexTape>
                 <div>
                     <MapTile gridData={Oarbreaker[0]} mapName={"OarbreakerHex"} />
