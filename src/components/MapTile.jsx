@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useQuery } from "react-query";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 
 const TileGroup = styled.div`
     color: rgba(138, 138, 138, 0.95);
@@ -34,8 +37,10 @@ const QueueName = styled.p`
     font-size: 1rem;
     text-shadow: 4px 4px 4px black, -4px -4px 4px black, 4px -4px 4px black, -4px 4px 4px black;
 `;
+const upArrow = <FontAwesomeIcon icon={faArrowUp} beatFade style={{ color: "#ff0606" }} />;
+const downArrow = <FontAwesomeIcon icon={faArrowDown} beatFade style={{ color: "#00f024" }} />;
 
-const MapTile = ({ gridData, mapName }) => {
+const MapTile = ({ gridData, mapName, previousGridData }) => {
     if (!gridData) {
         return <div>Loading...</div>;
     }
@@ -66,21 +71,54 @@ const MapTile = ({ gridData, mapName }) => {
     const wardenOwned = victoryPoints.filter(position => {
         return position.teamId === "WARDENS";
     });
+
     const isColonialOwned = colonialOwned.length > 0 && wardenOwned.length === 0;
     const isWardenOwned = colonialOwned.length === 0 && wardenOwned.length > 0;
 
     const MapName = gridData.currentMap.replaceAll("Hex", "");
+
     const colonialQueue =
         gridData.colonialQueueSize == 0 ? 1 : gridData.colonialQueueSize < 5 ? 2 : gridData.colonialQueueSize < 10 ? 3 : 4;
+
     const wardenQueue = gridData.wardenQueueSize == 0 ? 1 : gridData.wardenQueueSize < 5 ? 2 : gridData.wardenQueueSize < 10 ? 3 : 4;
+    let wardenQueueUp = "nochange";
+    let colonialQueueUp = "nochange";
+    if (previousGridData?.[0]) {
+        wardenQueueUp =
+            gridData.wardenQueueSize > previousGridData[0].wardenQueueSize
+                ? "up"
+                : gridData.wardenQueueSize < previousGridData[0].wardenQueueSize
+                ? "down"
+                : "nochange";
+
+        colonialQueueUp =
+            gridData.colonialQueueSize > previousGridData[0].colonialQueueSize
+                ? "up"
+                : gridData.colonialQueueSize < previousGridData[0].colonialQueueSize
+                ? "down"
+                : "nochange";
+    }
+
     if (!gridData) {
         return "Loading";
     }
+
+    if (gridData.wardenQueueSize || gridData.colonialQueueSize) {
+        console.log(mapName);
+        console.log("Warden queue went from", previousGridData[0].wardenQueueSize, " to ", gridData.wardenQueueSize);
+        console.log("Colonial queue went from", previousGridData[0].colonialQueueSize, " to ", gridData.colonialQueueSize);
+    }
+
     return (
         <TileGroup iscolonialowned={isColonialOwned.toString()} iswardenowned={isWardenOwned.toString()}>
             <TileName>{MapName}</TileName>
-            <QueueName queue={wardenQueue}>Warden Queue: {gridData.wardenQueueSize}</QueueName>
-            <QueueName queue={colonialQueue}>Colonial Queue: {gridData.colonialQueueSize}</QueueName>
+            <QueueName queue={wardenQueue}>
+                Warden Queue: {gridData.wardenQueueSize} {wardenQueueUp === "up" ? upArrow : wardenQueueUp === "down" ? downArrow : null}
+            </QueueName>
+            <QueueName queue={colonialQueue}>
+                Colonial Queue: {gridData.colonialQueueSize}{" "}
+                {colonialQueueUp === "up" ? upArrow : colonialQueueUp === "down" ? downArrow : null}
+            </QueueName>
             <p>
                 Colonials Control {colonialVictoryPoints.length}/{victoryPoints.length}
             </p>

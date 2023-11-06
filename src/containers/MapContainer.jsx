@@ -28,10 +28,19 @@ const mapsData = [
     ["GodcroftsHex", "TempestIslandHex", "TheFingersHex"],
 ];
 
+function usePrevious(previousData) {
+    const ref = React.useRef();
+    React.useEffect(() => {
+        ref.current = previousData;
+    }, [previousData]);
+    return ref.current;
+}
+
 const MapContainer = ({ queueData }) => {
     const queueMap = queueData.serverConnectionInfoList.map(grid => grid);
     const totalWardenQueue = queueMap.reduce((total, grid) => total + grid.wardenQueueSize, 0);
     const totalColonialQueue = queueMap.reduce((total, grid) => total + grid.colonialQueueSize, 0);
+    const previousQueueData = usePrevious(queueMap);
 
     return (
         <>
@@ -45,13 +54,25 @@ const MapContainer = ({ queueData }) => {
             <FlexTape>
                 {mapsData.map((row, rowIndex) => (
                     <div key={rowIndex}>
-                        {row.map((mapName, mapIndex) => (
-                            <MapTile
-                                key={mapIndex}
-                                gridData={queueData.serverConnectionInfoList.find(grid => grid.currentMap === mapName)}
-                                mapName={mapName}
-                            />
-                        ))}
+                        {row.map((mapName, mapIndex) => {
+                            const currentGridData = queueData.serverConnectionInfoList.find(grid => grid.currentMap === mapName);
+                            let previousGridData = [{ wardenQueueSize: 0, colonialQueueSize: 0 }];
+                            if (previousQueueData) {
+                                previousGridData = previousQueueData
+                                    .map(grid => {
+                                        if (grid.currentMap === mapName) {
+                                            return grid;
+                                        }
+                                    })
+                                    .filter(Boolean);
+                            }
+
+                            return previousGridData ? (
+                                <MapTile key={mapIndex} gridData={currentGridData} previousGridData={previousGridData} mapName={mapName} />
+                            ) : (
+                                <div>Loading...</div> // Or a default value
+                            );
+                        })}
                     </div>
                 ))}
             </FlexTape>
