@@ -103,12 +103,6 @@ const MapTile = ({ gridData, mapName, previousGridData }) => {
         return "Loading";
     }
 
-    if (gridData.wardenQueueSize || gridData.colonialQueueSize) {
-        console.log(mapName);
-        console.log("Warden queue went from", previousGridData[0].wardenQueueSize, " to ", gridData.wardenQueueSize);
-        console.log("Colonial queue went from", previousGridData[0].colonialQueueSize, " to ", gridData.colonialQueueSize);
-    }
-
     return (
         <TileGroup iscolonialowned={isColonialOwned.toString()} iswardenowned={isWardenOwned.toString()}>
             <TileName>{MapName}</TileName>

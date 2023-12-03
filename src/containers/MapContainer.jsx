@@ -44,13 +44,8 @@ const MapContainer = ({ queueData }) => {
 
     return (
         <>
-            <PlayerRatio>
-                Wardens : {(queueData.normalizedGlobalPopulation * 100).toPrecision(4)}% - Total Wardens in Queues: {totalWardenQueue}
-            </PlayerRatio>
-            <PlayerRatio>
-                Colonials : {((1 - queueData.normalizedGlobalPopulation) * 100).toPrecision(4)}% - Total Colonials in Queues:
-                {totalColonialQueue}
-            </PlayerRatio>
+            <PlayerRatio>Total Wardens in Queues: {totalWardenQueue}</PlayerRatio>
+            <PlayerRatio>Total Colonials in Queues: {totalColonialQueue}</PlayerRatio>
             <FlexTape>
                 {mapsData.map((row, rowIndex) => (
                     <div key={rowIndex}>
