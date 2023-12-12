@@ -1,7 +1,7 @@
 {
     "crons": [
         {
-            "path": "/api/queueGrab.js",
+            "path": "/api/queueGrab",
             "schedule": "0,30 * * * *"
         }
     ],
