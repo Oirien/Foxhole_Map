@@ -1,6 +1,6 @@
 import { sql } from "@vercel/postgres";
 
-async function queueFunction() {
+export async function queueFunction() {
     const queueResponse = await fetch("https://war-service-live.foxholeservices.com/external/shardStatus")
         .then(res => res.json())
         .then(data => data);
